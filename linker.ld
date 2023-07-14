@@ -9,11 +9,11 @@ SECTIONS
   .data       : { *(.data) }
 
   . = ALIGN(0x8);
-  bss_begin = .;
-  .bss : { *(.bss) }
-  bss_end = .;
+  __bss_begin = .;
+  .bss (NOLOAD) : { *(.bss) }
+  __bss_end = .;
 
   __kernel_end = .;
 
-  "/DISCARD/" : { *(.eh_frame) *(.comment) }
+  /DISCARD/ : { *(.eh_frame) *(.comment) }
 }
