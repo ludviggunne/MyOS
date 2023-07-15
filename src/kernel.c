@@ -7,8 +7,5 @@ void kmain()
 {
 
   uart_init();
-  while (1) {
-    char c = uart_read();
-    printf("You sent: %c\n\r", c);
-  }
+  printf("Current Exception level: %d", get_exception_level());
 }

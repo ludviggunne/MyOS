@@ -14,7 +14,7 @@ halt_core:
     b       halt_core
 
 main_core:
-    // Zero uninitialized data
+    // Zero unini ialized data
     ldr     x0, =__bss_begin
     ldr     x1, =__bss_end
 
