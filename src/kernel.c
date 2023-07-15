@@ -7,5 +7,6 @@ void kmain()
 {
 
   uart_init();
-  printf("Current Exception level: %d", get_exception_level());
+  
+  printf("Hello!\n");
 }
