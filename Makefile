@@ -8,6 +8,7 @@ OBJDUMP  = $(PREFIX)-objdump
 NM       = $(PREFIX)-nm
 
 CFLAGS   = -Wall -nostdlib -nostartfiles -ffreestanding -mgeneral-regs-only
+DEFINES  = -DPRINTF_DISABLE_SUPPORT_FLOAT
 
 BUILD_DIR = build
 SRC_DIR   = src
@@ -32,7 +33,7 @@ $(BUILD_DIR)/kernel8.elf: linker.ld $(OBJS)
 # Compile C files
 $(BUILD_DIR)/%_c.o: $(SRC_DIR)/%.c
 	mkdir -p $(BUILD_DIR)
-	$(CC) $(CFLAGS) -I$(INCLUDE) -c $< -o $@
+	$(CC) $(CFLAGS) -I$(INCLUDE) $(DEFINES) -c $< -o $@
 
 # Compile assembly files
 $(BUILD_DIR)/%_s.o: $(SRC_DIR)/%.S
@@ -58,4 +59,4 @@ transfer:
 	umount mount
 
 console:
-	minicom -D /dev/ttyUSB0 -b 115200
+	screen /dev/ttyUSB0 115200

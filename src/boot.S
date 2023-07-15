@@ -14,7 +14,6 @@ halt_core:
     b       halt_core
 
 main_core:
-    b       .continue0 // REMOVE THIS
     // Zero uninitialized data
     ldr     x0, =__bss_begin
     ldr     x1, =__bss_end

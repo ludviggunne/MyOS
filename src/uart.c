@@ -27,7 +27,7 @@ void uart_init()
   *(volatile uint32_t*) AUX_MU_IER_REG   = 0;                 // disable interrupts
   *(volatile uint32_t*) AUX_MU_MCR_REG   = 2;                 // set RTS line high
   *(volatile uint32_t*) AUX_MU_BAUD_REG  = BAUD_REG_VALUE;    // set 115200 baudrate
-  *(volatile uint32_t*) AUX_MU_LCR_REG   = 1;                 // enable 8-bit mode
+  *(volatile uint32_t*) AUX_MU_LCR_REG   = 3;                 // enable 8-bit mode
   *(volatile uint32_t*) AUX_MU_CNTL_REG |= 3;                 // enable transmit & recieve
 }
 
