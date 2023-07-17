@@ -7,8 +7,6 @@ void kmain()
 {
   uart_init();
 
-  while (1) {
-    printf("Current Exception Level: %d\n\r", get_exception_level());
-    delay(1000000);
-  }
+  printf("Current Exception Level: %d\n\r", get_exception_level());
+  asm ("svc #0");
 }

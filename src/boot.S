@@ -11,11 +11,7 @@ _start:
     and     x0, x0, #0xFF
     cmp     x0, #0x00
     beq     main_core
-    b       halt_core
-
-
-halt_core:
-    b       halt_core
+    b       spin_core
 
 
 main_core:
@@ -46,5 +42,8 @@ el1_entry:
     ldr     x1, =__bss_end
     bl      memzero64
 
+    // Init exception vector table 
+    bl      evtable_init
+
     bl      kmain
-    b       halt_core
+    b       spin_core
