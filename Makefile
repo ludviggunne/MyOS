@@ -52,7 +52,7 @@ objdump:
 nm:
 	$(NM) $(BUILD_DIR)/kernel8.elf -n
 
-transfer:
+transfer: kernel8.img
 	mount /dev/sdb1 mount
 	cp kernel8.img config.txt mount
 	sync

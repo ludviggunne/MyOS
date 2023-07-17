@@ -5,8 +5,10 @@
 
 void kmain()
 {
-
   uart_init();
-  
-  printf("Hello!\n");
+
+  while (1) {
+    printf("Current Exception Level: %d\n\r", get_exception_level());
+    delay(1000000);
+  }
 }
