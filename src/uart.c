@@ -21,24 +21,24 @@ void uart_init()
   GPIO_PUP_PDN_CNTRL_REG0 &= 0x0fffffff; // disable pull-up /-down resitors for 
                                          // pins 14 & 15
 
-  *(volatile uint32_t*) AUX_ENABLES      = 1;                 // enable mini UART
-  *(volatile uint32_t*) AUX_MU_CNTL_REG  = 0;                 // disable transmit & recieve, as well as
-                                                              //    auto flow control
-  *(volatile uint32_t*) AUX_MU_IER_REG   = 0;                 // disable interrupts
-  *(volatile uint32_t*) AUX_MU_MCR_REG   = 2;                 // set RTS line high
-  *(volatile uint32_t*) AUX_MU_BAUD_REG  = BAUD_REG_VALUE;    // set 115200 baudrate
-  *(volatile uint32_t*) AUX_MU_LCR_REG   = 3;                 // enable 8-bit mode
-  *(volatile uint32_t*) AUX_MU_CNTL_REG |= 3;                 // enable transmit & recieve
+  AUX_REGS.aux_enables      = 1;                 // enable mini UART
+  AUX_REGS.aux_mu_cntl_reg  = 0;                 // disable transmit & recieve, as well as
+                                                 //    auto flow control
+  AUX_REGS.aux_mu_ier_reg   = 0;                 // disable interrupts
+  AUX_REGS.aux_mu_mcr_reg   = 2;                 // set RTS line high
+  AUX_REGS.aux_mu_baud_reg  = BAUD_REG_VALUE;    // set 115200 baudrate
+  AUX_REGS.aux_mu_lcr_reg   = 3;                 // enable 8-bit mode
+  AUX_REGS.aux_mu_cntl_reg |= 3;                 // enable transmit & recieve
 }
 
 void uart_write(char c)
 {
-  while (!(*(volatile uint32_t*)AUX_MU_LSR_REG & 0x20));
-  *(volatile uint32_t*)AUX_MU_IO_REG = c;
+  while (!(AUX_REGS.aux_mu_lsr_reg & 0x20));
+  AUX_REGS.aux_mu_io_reg = c;
 }
 
 char uart_read()
 {
-  while (!(*(volatile uint32_t*)AUX_MU_LSR_REG & 0x01));
-  return *(volatile uint32_t*)AUX_MU_IO_REG & 0xff;
+  while (!(AUX_REGS.aux_mu_lsr_reg & 0x01));
+  return AUX_REGS.aux_mu_io_reg & 0xff;
 }

@@ -2,16 +2,27 @@
 #define _AUX_H_
 
 #include "pbase.h"
+#include <stdint.h>
+
+struct __attribute__((packed)) aux_regs {
+  volatile uint32_t aux_irq;
+  volatile uint32_t aux_enables;
+           uint32_t _padding0[15];
+  volatile uint32_t aux_mu_io_reg;
+  volatile uint32_t aux_mu_ier_reg;
+  volatile uint32_t aux_mu_iir_reg;
+  volatile uint32_t aux_mu_lcr_reg;
+  volatile uint32_t aux_mu_mcr_reg;
+  volatile uint32_t aux_mu_lsr_reg;
+  volatile uint32_t aux_mu_msr_reg;
+  volatile uint32_t aux_mu_scratch;
+  volatile uint32_t aux_mu_cntl_reg;
+  volatile uint32_t aux_mu_stat_reg;
+  volatile uint32_t aux_mu_baud_reg;
+  // TODO: add more registers
+};
 
 #define AUX_BASE (PBASE + 0x00215000)
-
-#define AUX_ENABLES     (AUX_BASE + 0x04)
-#define AUX_MU_IO_REG   (AUX_BASE + 0x40)
-#define AUX_MU_IER_REG  (AUX_BASE + 0x44)
-#define AUX_MU_MCR_REG  (AUX_BASE + 0x50)
-#define AUX_MU_LCR_REG  (AUX_BASE + 0x4c)
-#define AUX_MU_LSR_REG  (AUX_BASE + 0x54)
-#define AUX_MU_CNTL_REG (AUX_BASE + 0x60)
-#define AUX_MU_BAUD_REG (AUX_BASE + 0x68)
+#define AUX_REGS (*(struct aux_regs*)AUX_BASE)
 
 #endif
