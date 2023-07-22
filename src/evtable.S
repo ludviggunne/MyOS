@@ -54,6 +54,10 @@ pop_regs %m-2, %n-2
 
 // Call when entering exception handler
 .macro excep_begin
+str   x0, [sp, #-16]!
+mov   x0, #(0b1111 << 6)
+msr   daif, x0
+ldr   x0, [sp], #16
 push_regs
 .endm
 
@@ -61,6 +65,7 @@ push_regs
 // Call when exiting exception handler
 .macro excep_end
 pop_regs
+msr   daif, xzr
 eret
 .endm
 
@@ -70,7 +75,7 @@ evtable_init:
     msr       vbar_el1, x0
     ret
 
-.align 11
+.align 11        // 11 ls bits of vbar_el1 are reserved
 evtable:
     evtentry     Sync_Handler_E1t
     evtentry     IRQ_Handler_E1t
@@ -109,7 +114,9 @@ Sync_Handler_E1h:
     unimplemented_handler SYNC_E1H
 
 IRQ_Handler_E1h:
-    unimplemented_handler IRQ_E1H
+    excep_begin
+    bl    handle_irq_el1h
+    excep_end
 
 FIQ_Handler_E1h:
     unimplemented_handler FIQ_E1H

@@ -1,9 +1,9 @@
 
 #include "printf.h"
+#include "exception.h"
 #include <stdint.h>
 
-const char *eherr_strs[] = {
-
+const char *excep_strs[] = {
   "Sync_E1t",
   "IRQ_E1t",
   "FIQ_E1t",
@@ -22,12 +22,22 @@ const char *eherr_strs[] = {
   "SError_E0_32"
 };
 
-void unimpl_handler_err(uint64_t type, uint64_t addr, uint64_t esr)
+void unimpl_handler_err(uint64_t type, uint64_t elr, uint64_t esr)
 {
-  printf(
-    "Unimplemented Exception Handler Error:\n\r"
-    "   Type:    %s\n\r"
-    "   Address: 0x%p\n\r"
-    "   ESR:     0x%p\n\r",
-    eherr_strs[type], addr, esr);
+  printf("Unimplemented Exception Handler Error:\n\r"
+         "    Type: %s\n\r"
+         "    ELR:  %p\n\r"
+         "    ESR:  %p\n\r\n",
+         excep_strs[type], elr, esr);
+}
+
+void irq_mask()
+{
+  const uint64_t mask = (0x1111 << 6);
+  asm ("msr   daif, %0" :: "r" (mask));
+}
+
+void irq_unmask()
+{
+  asm ("msr   daif, xzr");
 }
