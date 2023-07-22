@@ -1,5 +1,5 @@
 
-#include "uart.h"
+#include "peripherals/uart.h"
 
 void _putchar(char character) {
 

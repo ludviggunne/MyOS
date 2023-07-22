@@ -1,25 +1,24 @@
 
-#include "uart.h"
-#include "aux.h"
-#include "gpio.h"
+#include "peripherals/uart.h"
+#include "peripherals/aux.h"
+#include "peripherals/gpio.h"
+#include "clock.h"
 
 #include <stdint.h>
 
-#define CORE_FREQ       ((uint64_t) 500000000)
 #define BAUDRATE        ((uint64_t) 115200)
-#define BAUD_REG_VALUE  ((uint32_t)(CORE_FREQ / (BAUDRATE * 8) - 1))
+#define BAUD_REG_VALUE  ((uint32_t)(CLOCK_FREQ / (BAUDRATE * 8) - 1))
 
 void uart_init()
 {
 
-  uint32_t reg = *(volatile uint32_t*)GPFSEL1;
+  uint32_t reg = GPIO_REGS.gpfsel1;
   reg &= ~(0b111111 << 12); // clear pin 14 & 15
   reg |=  (0b010010 << 12); // set alt5 func for pin 14 & 15 (TDX1 & RDX1)
-  *(volatile uint32_t*)GPFSEL1 = reg;
+  GPIO_REGS.gpfsel1 = reg;
 
-  *(volatile uint32_t*)
-  GPIO_PUP_PDN_CNTRL_REG0 &= 0x0fffffff; // disable pull-up /-down resitors for 
-                                         // pins 14 & 15
+  GPIO_REGS.gpio_pup_pdn_cntrl_reg0 &= 0x0fffffff; // disable pull-up /-down resitors for 
+                                                   // pins 14 & 15
 
   AUX_REGS.aux_enables      = 1;                 // enable mini UART
   AUX_REGS.aux_mu_cntl_reg  = 0;                 // disable transmit & recieve, as well as
